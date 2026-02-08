@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Turn-based Text RPG</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+</head>
+<body>
+    <!-- Popup Đăng nhập/Đăng ký -->
+    <div id="auth-popup" class="popup">
+        <div class="popup-content">
+            <div class="auth-tabs">
+                <button class="tab-btn active" data-tab="login">Đăng nhập</button>
+                <button class="tab-btn" data-tab="register">Đăng ký</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <h2>Đăng nhập</h2>
+                <div class="form-group">
+                    <label for="login-username">Tên tài khoản</label>
+                    <input type="text" id="login-username" placeholder="Nhập tên tài khoản">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Mật khẩu</label>
+                    <input type="password" id="login-password" placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label for="login-captcha">Mã xác nhận: <span id="captcha-text">ABCD</span></label>
+                    <input type="text" id="login-captcha" placeholder="Nhập mã xác nhận">
+                </div>
+                <button id="login-btn" class="btn-primary">Đăng nhập</button>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <h2>Đăng ký tài khoản</h2>
+                <div class="form-group">
+                    <label for="reg-username">Tên tài khoản</label>
+                    <input type="text" id="reg-username" placeholder="Nhập tên tài khoản">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Mật khẩu</label>
+                    <input type="password" id="reg-password" placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm">Xác nhận mật khẩu</label>
+                    <input type="password" id="reg-confirm" placeholder="Xác nhận mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label for="reg-captcha">Mã xác nhận: <span id="reg-captcha-text">EFGH</span></label>
+                    <input type="text" id="reg-captcha" placeholder="Nhập mã xác nhận">
+                </div>
+                <div class="form-group">
+                    <label for="recovery-code">Mã khôi phục</label>
+                    <input type="text" id="recovery-code" placeholder="Nhập mã khôi phục">
+                </div>
+                <div class="form-group">
+                    <label for="recovery-hint">Gợi ý mã khôi phục</label>
+                    <input type="text" id="recovery-hint" placeholder="Nhập gợi ý">
+                </div>
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="agree-terms">
+                    <label for="agree-terms">Tôi đồng ý với các điều khoản và điều kiện</label>
+                </div>
+                <button id="register-btn" class="btn-primary">Đăng ký</button>
+            </div>
+        </div>
+    </div>
+	<!-- Popup Chọn Class Khởi Đầu -->
+	<div id="class-select-popup" class="popup hidden">
+		<div class="popup-content">
+			<h2>Chọn Class Khởi Đầu</h2>
+			<p>Hãy chọn class bạn muốn bắt đầu cuộc hành trình:</p>
+			
+			<div class="class-selection-grid">
+				<div class="class-option" data-class="Warrior">
+					<i class="fas fa-shield-alt"></i>
+					<h3>Chiến Binh</h3>
+					<p>Vũ khí: Kiếm</p>
+					<p>Sức mạnh cận chiến, phòng thủ cao</p>
+					<button class="select-class-btn">Chọn</button>
+				</div>
+				
+				<div class="class-option" data-class="Rogue">
+					<i class="fas fa-user-secret"></i>
+					<h3>Đạo Tặc</h3>
+					<p>Vũ khí: Song Dao</p>
+					<p>Linh hoạt, sát thương bất ngờ</p>
+					<button class="select-class-btn">Chọn</button>
+				</div>
+				
+				<div class="class-option" data-class="Mage">
+					<i class="fas fa-hat-wizard"></i>
+					<h3>Pháp Sư</h3>
+					<p>Vũ khí: Trượng Phép</p>
+					<p>Sát thương phép thuật từ xa</p>
+					<button class="select-class-btn">Chọn</button>
+				</div>
+				
+				<div class="class-option" data-class="Archer">
+					<i class="fas fa-bow-arrow"></i>
+					<h3>Cung Thủ</h3>
+					<p>Vũ khí: Cung</p>
+					<p>Tấn công từ xa chính xác</p>
+					<button class="select-class-btn">Chọn</button>
+				</div>
+				
+				<div class="class-option" data-class="Cleric">
+					<i class="fas fa-pray"></i>
+					<h3>Tín Đồ</h3>
+					<p>Vũ khí: Gậy Thánh</p>
+					<p>Hỗ trợ, chữa lành</p>
+					<button class="select-class-btn">Chọn</button>
+				</div>
+			</div>
+		</div>
+	</div>
+    <!-- Game Container -->
+    <div id="game-container" class="hidden">
+        <!-- Sidebar Menu -->
+        <div class="sidebar">
+            <div class="player-info">
+                <h3 id="player-name">Tên Player</h3>
+                <p id="player-class">Chiến Binh</p>
+                <p>Lv. <span id="player-level">1</span></p>
+                <p>Lực chiến: <span id="player-power">100</span></p>
+            </div>
+            
+            <nav class="main-menu">
+                <ul>
+                    <li><button class="menu-btn active" data-section="campaign"><i class="fas fa-flag"></i> Chiến Dịch</button></li>
+                    <li><button class="menu-btn" data-section="player"><i class="fas fa-user"></i> Người Chơi</button></li>
+                    <li><button class="menu-btn" data-section="abyss"><i class="fas fa-mountain"></i> Vực Thẳm</button></li>
+                    <li><button class="menu-btn" data-section="events"><i class="fas fa-calendar-star"></i> Sự Kiện</button></li>
+                    <li><button class="menu-btn" data-section="shop"><i class="fas fa-shopping-cart"></i> Cửa Hàng</button></li>
+                    <li><button class="menu-btn" data-section="wishes"><i class="fas fa-star"></i> Ước Nguyện</button></li>
+                    <li><button class="menu-btn" data-section="settings"><i class="fas fa-cog"></i> Cài Đặt</button></li>
+                    <li><button class="menu-btn" data-section="logout"><i class="fas fa-sign-out-alt"></i> Đăng Xuất</button></li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Campaign Section -->
+            <section id="campaign-section" class="content-section active">
+                <h2><i class="fas fa-flag"></i> Chiến Dịch</h2>
+                <div class="campaign-options">
+                    <div class="campaign-card">
+                        <h3><i class="fas fa-book"></i> Cốt Truyện</h3>
+                        <p>Trải qua cốt truyện chính của game</p>
+                        <button class="btn-secondary">Vào</button>
+                    </div>
+                    <div class="campaign-card">
+                        <h3><i class="fas fa-dumbbell"></i> Huấn Luyện</h3>
+                        <p>Rèn luyện kỹ năng và tăng cấp</p>
+                        <button class="btn-secondary">Vào</button>
+                    </div>
+                    <div class="campaign-card">
+                        <h3><i class="fas fa-tower"></i> Tháp Vô Tận</h3>
+                        <p>Thử thách không giới hạn</p>
+                        <button class="btn-secondary">Vào</button>
+                    </div>
+                    <div class="campaign-card">
+                        <h3><i class="fas fa-trophy"></i> Sảnh Danh Vọng</h3>
+                        <p>Xem bảng xếp hạng và tham gia võ đài</p>
+                        <button class="btn-secondary" id="hall-of-fame-btn">Vào</button>
+                    </div>
+                </div>
+                
+                <!-- Hall of Fame Sub-section -->
+                <div id="hall-of-fame" class="hidden">
+                    <h3><i class="fas fa-trophy"></i> Sảnh Danh Vọng</h3>
+                    <div class="hall-tabs">
+                        <button class="tab-btn active" data-tab="ranking">Bảng Xếp Hạng</button>
+                        <button class="tab-btn" data-tab="arena">Võ Đài</button>
+                    </div>
+                    
+                    <div id="ranking-tab" class="hall-content active">
+                        <h4>Bảng Xếp Hạng</h4>
+                        <table class="ranking-table">
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Tên</th>
+                                    <th>Cấp độ</th>
+                                    <th>Lực chiến</th>
+                                    <th>Giờ chơi</th>
+                                    <th>Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ranking-body">
+                                <!-- Rankings will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="arena-tab" class="hall-content">
+                        <h4>Võ Đài</h4>
+                        <p>Thách đấu với người chơi khác để tăng hạng</p>
+                        <button class="btn-secondary">Khiêu chiến</button>
+                        <div class="arena-opponents">
+                            <h5>Đối thủ đề xuất</h5>
+                            <div id="opponents-list">
+                                <!-- Opponents will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Player Section -->
+            <section id="player-section" class="content-section">
+                <h2><i class="fas fa-user"></i> Người Chơi</h2>
+                <div class="player-stats-container">
+                    <div class="basic-info">
+                        <div class="info-row">
+                            <span class="label">Tên:</span>
+                            <span id="stat-name" class="value">Player1</span>
+                            <button class="icon-btn" title="Kỹ Năng"><i class="fas fa-fire"></i></button>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Danh Hiệu:</span>
+                            <span id="stat-title" class="value">Tân Thủ</span>
+                            <button class="icon-btn" title="Cây Phát Triển"><i class="fas fa-tree"></i></button>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Chức Nghiệp:</span>
+                            <span id="stat-class" class="value">Chiến Binh</span>
+                            <button class="icon-btn" title="Trang Bị"><i class="fas fa-shield-alt"></i></button>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Cấp Độ:</span>
+                            <span id="stat-level" class="value">1</span>
+                            <button class="icon-btn" title="Lõi"><i class="fas fa-gem"></i></button>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Kinh nghiệm:</span>
+                            <div class="exp-container">
+                                <div class="exp-bar">
+                                    <div class="exp-fill" id="exp-fill"></div>
+                                </div>
+                                <span id="exp-text" class="exp-text">50/100 [50%]</span>
+                            </div>
+                            <button class="icon-btn" title="Thánh Vật"><i class="fas fa-cross"></i></button>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Rank:</span>
+                            <span id="stat-rank" class="value">Đồng</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="label">Lực Chiến:</span>
+                            <span id="stat-power" class="value">150</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stats-header">------- CHỈ SỐ -------</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Sức Mạnh:</span>
+                            <span id="stat-str" class="stat-value">10 [+2]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Thể Lực:</span>
+                            <span id="stat-vit" class="stat-value">8 [+1]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Chống Chịu:</span>
+                            <span id="stat-end" class="stat-value">7 [+1]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Khéo Léo:</span>
+                            <span id="stat-dex" class="stat-value">6 [+0]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Chính Xác:</span>
+                            <span id="stat-acc" class="stat-value">5 [+0]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Trí Tuệ:</span>
+                            <span id="stat-int" class="stat-value">4 [+0]</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Thống Trị:</span>
+                            <span id="stat-dom" class="stat-value">3 [+0]</span>
+                        </div>
+                        <div class="stat-row" id="divine-stat">
+                            <span class="stat-label">Thần Lực:</span>
+                            <span id="stat-divine" class="stat-value">0 [+0]</span>
+                        </div>
+                        <div class="stat-row" id="demonic-stat">
+                            <span class="stat-label">Quỷ Lực:</span>
+                            <span id="stat-demonic" class="stat-value">0 [+0]</span>
+                        </div>
+                        <div class="stat-row hidden" id="chaos-stat">
+                            <span class="stat-label">Hỗn Loạn:</span>
+                            <span id="stat-chaos" class="stat-value">0 [+0]</span>
+                        </div>
+                        <div class="stats-footer">----------------------</div>
+                    </div>
+                </div>
+                
+                <!-- Class Tree Viewer -->
+                <div class="class-tree-section">
+                    <h3>Cây Phát Triển</h3>
+                    <div class="class-tree" id="class-tree">
+                        <!-- Class tree will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Sections (Placeholders) -->
+            <section id="abyss-section" class="content-section">
+                <h2><i class="fas fa-mountain"></i> Vực Thẳm</h2>
+                <p>Nội dung Vực Thẳm đang được phát triển...</p>
+            </section>
+            
+            <section id="events-section" class="content-section">
+                <h2><i class="fas fa-calendar-star"></i> Sự Kiện</h2>
+                <p>Nội dung Sự Kiện đang được phát triển...</p>
+            </section>
+            
+            <section id="shop-section" class="content-section">
+                <h2><i class="fas fa-shopping-cart"></i> Cửa Hàng</h2>
+                <p>Nội dung Cửa Hàng đang được phát triển...</p>
+            </section>
+            
+            <section id="wishes-section" class="content-section">
+                <h2><i class="fas fa-star"></i> Ước Nguyện</h2>
+                <p>Nội dung Ước Nguyện đang được phát triển...</p>
+            </section>
+            
+            <section id="settings-section" class="content-section">
+                <h2><i class="fas fa-cog"></i> Cài Đặt</h2>
+                <p>Nội dung Cài Đặt đang được phát triển...</p>
+            </section>
+            
+            <section id="logout-section" class="content-section">
+                <h2><i class="fas fa-sign-out-alt"></i> Đăng Xuất</h2>
+                <p>Bạn có chắc chắn muốn đăng xuất?</p>
+                <button id="confirm-logout" class="btn-danger">Đăng xuất</button>
+            </section>
+        </div>
+    </div>
+
+    <!-- Battle Log (Auto Turn-based) -->
+    <div id="battle-log" class="hidden">
+        <div class="battle-header">
+            <h3><i class="fas fa-fist-raised"></i> Trận Chiến</h3>
+            <button id="close-battle" class="btn-secondary">Đóng</button>
+        </div>
+        <div class="battle-content" id="battle-content">
+            <!-- Battle messages will appear here -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

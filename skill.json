@@ -1,0 +1,452 @@
+{
+  "skills": {
+    "Warrior": [
+      {
+        "name": "Basic Slash",
+        "vnName": "Chém Cơ Bản",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 10,
+        "scaling": {"str": 1.2},
+        "cooldown": 0,
+        "description": "Một nhát chém cơ bản"
+      },
+      {
+        "name": "Power Strike",
+        "vnName": "Đòn Mạnh",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 25,
+        "scaling": {"str": 1.8, "vit": 0.3},
+        "cooldown": 3,
+        "description": "Tập trung sức mạnh tấn công mạnh"
+      },
+      {
+        "name": "Defensive Stance",
+        "vnName": "Thế Phòng Thủ",
+        "type": "buff",
+        "buffType": "defense",
+        "value": 15,
+        "scaling": {"end": 0.5},
+        "duration": 3,
+        "cooldown": 6,
+        "description": "Tăng phòng thủ trong 3 lượt"
+      }
+    ],
+    
+    "Knight": [
+      {
+        "name": "Holy Slash",
+        "vnName": "Chém Thánh",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 35,
+        "scaling": {"str": 1.5, "divine": 1.0},
+        "cooldown": 2,
+        "description": "Nhát chém mang sức mạnh thần thánh"
+      },
+      {
+        "name": "Shield Bash",
+        "vnName": "Đập Khiên",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 20,
+        "scaling": {"str": 1.0, "vit": 1.0},
+        "effect": "stun",
+        "stunChance": 30,
+        "cooldown": 4,
+        "description": "Đập khiên làm choáng kẻ địch"
+      },
+      {
+        "name": "Divine Protection",
+        "vnName": "Bảo Vệ Thần Thánh",
+        "type": "buff",
+        "buffType": "shield",
+        "value": 50,
+        "scaling": {"divine": 2.0, "vit": 0.8},
+        "duration": 2,
+        "cooldown": 8,
+        "description": "Tạo khiên thần thánh hấp thụ sát thương"
+      },
+      {
+        "name": "Knight's Resolve",
+        "vnName": "Quyết Tâm Kỵ Sĩ",
+        "type": "passive",
+        "description": "Tăng 10% HP tối đa và 5% phòng thủ",
+        "effect": {"maxHP": 0.1, "defense": 0.05}
+      }
+    ],
+    
+    "Berserker": [
+      {
+        "name": "Bloodthirst",
+        "vnName": "Khát Máu",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 40,
+        "scaling": {"str": 2.0, "demonic": 0.8},
+        "lifesteal": 0.3,
+        "cooldown": 3,
+        "description": "Tấn công khát máu, hồi HP theo sát thương gây ra"
+      },
+      {
+        "name": "Raging Blow",
+        "vnName": "Cú Đập Cuồng Nộ",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 50,
+        "scaling": {"str": 2.5, "chaos": 1.0},
+        "cooldown": 4,
+        "description": "Tấn công với sức mạnh cuồng nộ"
+      },
+      {
+        "name": "Frenzy",
+        "vnName": "Điên Cuồng",
+        "type": "buff",
+        "buffType": "attack_speed",
+        "value": 0.5,
+        "scaling": {"demonic": 0.1},
+        "duration": 3,
+        "cooldown": 10,
+        "description": "Tăng tốc độ tấn công 50% trong 3 lượt"
+      },
+      {
+        "name": "Berserker's Rage",
+        "vnName": "Cơn Thịnh Nộ Cuồng Chiến",
+        "type": "passive",
+        "description": "Khi HP dưới 30%, tăng 25% sát thương và 15% tốc độ tấn công",
+        "threshold": 0.3,
+        "effect": {"damage": 0.25, "attackSpeed": 0.15}
+      }
+    ],
+    
+    "Crusader": [
+      {
+        "name": "Divine Judgment",
+        "vnName": "Phán Quyết Thần Thánh",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 80,
+        "scaling": {"str": 2.0, "divine": 1.8, "dom": 1.2},
+        "cooldown": 5,
+        "description": "Lời phán quyết từ thiên đường, sát thương thần thánh lớn"
+      },
+      {
+        "name": "Heaven's Wrath",
+        "vnName": "Thịnh Nộ Thiên Đường",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 120,
+        "scaling": {"divine": 2.5, "str": 1.5},
+        "cooldown": 8,
+        "description": "Triệu hồi sự thịnh nộ từ thiên đàng"
+      },
+      {
+        "name": "Sacred Barrier",
+        "vnName": "Rào Chắn Thiêng Liêng",
+        "type": "buff",
+        "buffType": "shield",
+        "value": 150,
+        "scaling": {"divine": 3.0, "vit": 1.5},
+        "duration": 3,
+        "cooldown": 12,
+        "description": "Tạo rào chắn thần thánh bảo vệ bản thân"
+      },
+      {
+        "name": "Crusader's Faith",
+        "vnName": "Đức Tin Chiến Thánh",
+        "type": "passive",
+        "description": "Tăng 20% sát thương thần thánh và 15% kháng khống chế",
+        "effect": {"divineDamage": 0.2, "ccResist": 0.15}
+      },
+      {
+        "name": "Purify Evil",
+        "vnName": "Thanh Tẩy Cái Ác",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 60,
+        "scaling": {"divine": 2.0},
+        "bonusDamage": 0.5,
+        "bonusType": "demonic",
+        "cooldown": 4,
+        "description": "Gây thêm 50% sát thương với kẻ địch mang Quỷ Lực"
+      }
+    ],
+    
+    "Valkyrion": [
+      {
+        "name": "Valhalla's Call",
+        "vnName": "Tiếng Gọi Valhalla",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 150,
+        "scaling": {"divine": 3.0, "str": 2.0},
+        "cooldown": 6,
+        "description": "Triệu hồi sức mạnh từ đại sảnh Valhalla"
+      },
+      {
+        "name": "Divine Retribution",
+        "vnName": "Sự Trừng Phạt Thần Thánh",
+        "type": "counter",
+        "damageType": "divine",
+        "baseDamage": 100,
+        "scaling": {"divine": 2.5},
+        "duration": 2,
+        "cooldown": 10,
+        "description": "Phản công khi bị tấn công trong 2 lượt"
+      },
+      {
+        "name": "Celestial Shield",
+        "vnName": "Khiên Thiên Giới",
+        "type": "buff",
+        "buffType": "shield",
+        "value": 300,
+        "scaling": {"divine": 4.0, "vit": 2.0},
+        "duration": 2,
+        "cooldown": 15,
+        "description": "Tạo khiên thiên giới hấp thụ sát thương cực lớn"
+      },
+      {
+        "name": "Valkyrion's Grace",
+        "vnName": "Ân Điển Nữ Chiến Thần",
+        "type": "passive",
+        "description": "Mỗi khi sử dụng skill Thần Lực, hồi 10% HP tối đa",
+        "effect": {"healOnDivineSkill": 0.1}
+      },
+      {
+        "name": "Wings of Justice",
+        "vnName": "Đôi Cánh Công Lý",
+        "type": "buff",
+        "buffType": "dodge",
+        "value": 0.4,
+        "scaling": {"divine": 0.05},
+        "duration": 3,
+        "cooldown": 12,
+        "description": "Tăng 40% tỷ lệ né đòn trong 3 lượt"
+      }
+    ],
+    
+    "Ascended Crusader": [
+      {
+        "name": "God Slash",
+        "vnName": "Chém Thần",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 250,
+        "scaling": {"divine": 4.0, "str": 3.0, "all": 1.0},
+        "cooldown": 4,
+        "description": "Nhát chém của thần linh, sức mạnh vô song"
+      },
+      {
+        "name": "Heaven's Judgment",
+        "vnName": "Phán Quyết Của Trời",
+        "type": "ultimate",
+        "damageType": "divine",
+        "baseDamage": 500,
+        "scaling": {"divine": 6.0, "dom": 3.0},
+        "cooldown": 20,
+        "description": "Phán quyết tối thượng từ thiên đàng"
+      },
+      {
+        "name": "Absolute Defense",
+        "vnName": "Phòng Thủ Tuyệt Đối",
+        "type": "buff",
+        "buffType": "invincible",
+        "duration": 1,
+        "cooldown": 25,
+        "description": "Miễn dịch mọi sát thương trong 1 lượt"
+      },
+      {
+        "name": "Ascended Form",
+        "vnName": "Hình Thái Siêu Việt",
+        "type": "passive",
+        "description": "Tăng 30% tất cả chỉ số và miễn nhiễm với hiệu ứng Khống Chế",
+        "effect": {"allStats": 0.3, "ccImmune": true}
+      },
+      {
+        "name": "Divine Aura",
+        "vnName": "Hào Quang Thần Thánh",
+        "type": "aura",
+        "effect": "party_buff",
+        "value": 0.2,
+        "description": "Tăng 20% sát thương và phòng thủ cho toàn bộ đồng đội"
+      }
+    ],
+    
+    "Rogue": [
+      {
+        "name": "Backstab",
+        "vnName": "Đâm Sau Lưng",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 35,
+        "scaling": {"dex": 1.8},
+        "critChance": 0.3,
+        "cooldown": 3,
+        "description": "Đánh lén từ phía sau, tỷ lệ chí mạng cao"
+      },
+      {
+        "name": "Stealth",
+        "vnName": "Ẩn Mình",
+        "type": "buff",
+        "buffType": "stealth",
+        "duration": 2,
+        "cooldown": 8,
+        "description": "Ẩn mình trong 2 lượt, tăng sát thương đòn tiếp theo"
+      }
+    ],
+    
+    "Mage": [
+      {
+        "name": "Fireball",
+        "vnName": "Cầu Lửa",
+        "type": "active",
+        "damageType": "magic",
+        "baseDamage": 30,
+        "scaling": {"int": 1.5},
+        "cooldown": 2,
+        "description": "Bắn một quả cầu lửa vào kẻ địch"
+      },
+      {
+        "name": "Mana Shield",
+        "vnName": "Khiên Mana",
+        "type": "buff",
+        "buffType": "shield",
+        "value": 40,
+        "scaling": {"int": 1.0},
+        "duration": 2,
+        "cooldown": 6,
+        "description": "Tạo khiên mana bảo vệ bản thân"
+      }
+    ],
+    
+    "Assassin": [
+      {
+        "name": "Shadow Strike",
+        "vnName": "Đòn Đánh Bóng Tối",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 45,
+        "scaling": {"dex": 2.0, "demonic": 0.7},
+        "critChance": 0.4,
+        "cooldown": 3,
+        "description": "Tấn công từ trong bóng tối với tỷ lệ chí mạng cao"
+      },
+      {
+        "name": "Poison Blade",
+        "vnName": "Lưỡi Dao Độc",
+        "type": "dot",
+        "damageType": "poison",
+        "baseDamage": 15,
+        "scaling": {"dex": 0.8, "demonic": 0.5},
+        "duration": 3,
+        "cooldown": 4,
+        "description": "Gây độc cho kẻ địch trong 3 lượt"
+      }
+    ],
+    
+    "Elementalist": [
+      {
+        "name": "Elemental Burst",
+        "vnName": "Bùng Nổ Nguyên Tố",
+        "type": "active",
+        "damageType": "magic",
+        "baseDamage": 60,
+        "scaling": {"int": 2.0, "divine": 0.8},
+        "cooldown": 4,
+        "description": "Phóng ra năng lượng nguyên tố mạnh mẽ"
+      },
+      {
+        "name": "Elemental Ward",
+        "vnName": "Bảo Vệ Nguyên Tố",
+        "type": "buff",
+        "buffType": "resist_all",
+        "value": 0.2,
+        "duration": 3,
+        "cooldown": 10,
+        "description": "Tăng 20% kháng tất cả loại sát thương trong 3 lượt"
+      }
+    ],
+    
+    "Ranger": [
+      {
+        "name": "Rapid Shot",
+        "vnName": "Bắn Nhanh",
+        "type": "active",
+        "damageType": "physical",
+        "baseDamage": 25,
+        "scaling": {"acc": 1.5, "dex": 1.2},
+        "hits": 3,
+        "cooldown": 3,
+        "description": "Bắn nhanh 3 mũi tên liên tiếp"
+      },
+      {
+        "name": "Beast Companion",
+        "vnName": "Bạn Đồng Hành Thú",
+        "type": "summon",
+        "duration": 5,
+        "cooldown": 15,
+        "description": "Triệu hồi thú đồng hành chiến đấu trong 5 lượt"
+      }
+    ],
+    
+    "Paladin": [
+      {
+        "name": "Holy Smite",
+        "vnName": "Trừng Phạt Thánh",
+        "type": "active",
+        "damageType": "divine",
+        "baseDamage": 50,
+        "scaling": {"str": 1.5, "divine": 1.2},
+        "cooldown": 3,
+        "description": "Đòn tấn công thần thánh với sức mạnh lớn"
+      },
+      {
+        "name": "Lay on Hands",
+        "vnName": "Đặt Tay Chữa Lành",
+        "type": "heal",
+        "healValue": 80,
+        "scaling": {"divine": 1.5, "dom": 1.0},
+        "cooldown": 6,
+        "description": "Chữa lành vết thương cho bản thân hoặc đồng đội"
+      }
+    ]
+  },
+  
+  "skillCategories": {
+    "active": "Kỹ năng chủ động",
+    "passive": "Kỹ năng bị động",
+    "buff": "Kỹ năng tăng cường",
+    "debuff": "Kỹ năng giảm sút",
+    "heal": "Kỹ năng hồi phục",
+    "dot": "Sát thương theo thời gian",
+    "ultimate": "Tuyệt kỹ",
+    "summon": "Triệu hồi"
+  },
+  
+  "damageTypes": {
+    "physical": "Vật lý",
+    "magic": "Phép thuật",
+    "divine": "Thần thánh",
+    "demonic": "Quỷ lực",
+    "poison": "Độc",
+    "fire": "Lửa",
+    "ice": "Băng",
+    "lightning": "Sấm sét"
+  },
+  
+  "scalingFormula": {
+    "base": "Sát thương cơ bản",
+    "str": "Sức mạnh",
+    "dex": "Khéo léo",
+    "int": "Trí tuệ",
+    "vit": "Thể lực",
+    "end": "Chống chịu",
+    "acc": "Chính xác",
+    "dom": "Thống trị",
+    "divine": "Thần lực",
+    "demonic": "Quỷ lực",
+    "chaos": "Hỗn loạn",
+    "all": "Tất cả chỉ số"
+  }
+}
